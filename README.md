@@ -19,7 +19,7 @@ On my blog [_The Base_](https://base.of.sb), I use [Cloudflare R2](https://www.c
 ```bash
 npm install ghos3
 mkdir -p ./content/adapters/storage
-cp -r ./node_modules/ghos3 ./content/adapters/storage/s3
+cp -r ./node_modules/ghos3/* ./content/adapters/storage/s3
 ```
 
 ## Configuration
