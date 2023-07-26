@@ -124,6 +124,10 @@ class S3Storage extends StorageBase {
     return new S3(options)
   }
 
+  urlToPath(url) {
+    return url;
+  }
+
   async save(image: Image, targetDir?: string) {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
 
