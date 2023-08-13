@@ -124,6 +124,12 @@ class S3Storage extends StorageBase {
     return new S3(options)
   }
 
+  // Doesn't seem to be documented, but required for using this adapter for other media file types.
+  // Seealso: https://github.com/laosb/ghos3/pull/6
+  urlToPath(url) {
+    return url;
+  }
+
   async save(image: Image, targetDir?: string) {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
 
