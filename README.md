@@ -52,9 +52,9 @@ Largely the same, but note `signatureVersion` and `serverSideEncryption` are rem
 ### Via environment variables
 
 ```
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
 AWS_DEFAULT_REGION
+AWS_ACCESS_KEY_ID // optional
+AWS_SECRET_ACCESS_KEY // optional
 GHOST_STORAGE_ADAPTER_S3_PATH_BUCKET
 GHOST_STORAGE_ADAPTER_S3_ASSET_HOST  // optional
 GHOST_STORAGE_ADAPTER_S3_PATH_PREFIX // optional
