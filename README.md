@@ -29,6 +29,12 @@ Largely the same, but note `signatureVersion` and `serverSideEncryption` are rem
 ```json
 "storage": {
   "active": "s3",
+  "media":{
+     "adapter": "s3"
+  },
+  "files": {
+    "adapter": "s3"
+  },
   "s3": {
     "accessKeyId": "YOUR_ACCESS_KEY_ID",
     "secretAccessKey": "YOUR_SECRET_ACCESS_KEY",
