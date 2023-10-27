@@ -1,6 +1,6 @@
 {
   "name": "ghos3",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "S3 Storage adapter for Ghost.",
   "main": "index.js",
   "scripts": {
@@ -11,13 +11,13 @@
   "author": "Shibo Lyu <github@of.sb>",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.413.0",
+    "@aws-sdk/client-s3": "^3.437.0",
     "ghost-storage-base": "^1.0.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/ghost-storage-base": "^0.0.1",
-    "esbuild": "^0.19.3",
+    "esbuild": "^0.19.5",
     "prettier": "^2.8.4",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
