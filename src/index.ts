@@ -1,4 +1,9 @@
-import { S3, type S3ClientConfig } from '@aws-sdk/client-s3'
+import {
+  type PutObjectCommandInput,
+  type S3ClientConfig,
+  type ObjectCannedACL,
+  S3,
+} from '@aws-sdk/client-s3'
 import StorageBase, { type ReadOptions, type Image } from 'ghost-storage-base'
 import { join } from 'path'
 import { readFile } from 'fs/promises'
@@ -31,7 +36,7 @@ class S3Storage extends StorageBase {
   pathPrefix: string
   endpoint: string
   forcePathStyle: boolean
-  acl: string
+  acl?: ObjectCannedACL
 
   constructor(config: Config = {}) {
     super()
@@ -73,7 +78,9 @@ class S3Storage extends StorageBase {
       Boolean(process.env.GHOST_STORAGE_ADAPTER_S3_FORCE_PATH_STYLE) ||
       Boolean(forcePathStyle) ||
       false
-    this.acl = process.env.GHOST_STORAGE_ADAPTER_S3_ACL || acl || 'public-read'
+    this.acl = (process.env.GHOST_STORAGE_ADAPTER_S3_ACL ||
+      acl ||
+      'public-read') as ObjectCannedACL
   }
 
   async delete(fileName: string, targetDir?: string) {
@@ -126,9 +133,9 @@ class S3Storage extends StorageBase {
 
   // Doesn't seem to be documented, but required for using this adapter for other media file types.
   // Seealso: https://github.com/laosb/ghos3/pull/6
-  urlToPath(url) {
-    const parsedUrl = new URL(url);
-    return parsedUrl.pathname;
+  urlToPath(url: string) {
+    const parsedUrl = new URL(url)
+    return parsedUrl.pathname
   }
 
   async save(image: Image, targetDir?: string) {
@@ -139,7 +146,7 @@ class S3Storage extends StorageBase {
       readFile(image.path),
     ])
 
-    let config = {
+    let config: PutObjectCommandInput = {
       ACL: this.acl,
       Body: file,
       Bucket: this.bucket,
