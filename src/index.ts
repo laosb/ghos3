@@ -72,11 +72,11 @@ class S3Storage extends StorageBase {
     
     if(this.forcePathStyle) {
       defaultHost = `https://s3${
-        this.region === 'us-east-1' ? '' : `-${this.region}`
+        this.region === 'us-east-1' ? '' : `.${this.region}`
       }.amazonaws.com/${this.bucket}`
     } else {
       defaultHost = `https://${this.bucket}.s3${
-        this.region === 'us-east-1' ? '' : `-${this.region}`
+        this.region === 'us-east-1' ? '' : `.${this.region}`
       }.amazonaws.com`
     }
 
