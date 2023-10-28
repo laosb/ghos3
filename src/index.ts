@@ -6,7 +6,7 @@ import {
 } from '@aws-sdk/client-s3'
 import StorageBase, { type ReadOptions, type Image } from 'ghost-storage-base'
 import { join } from 'path'
-import { readFile } from 'fs/promises'
+import { createReadStream } from 'fs'
 import type { Readable } from 'stream'
 import type { Handler } from 'express'
 
@@ -152,10 +152,8 @@ class S3Storage extends StorageBase {
   async save(image: Image, targetDir?: string) {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
 
-    const [fileName, file] = await Promise.all([
-      this.getUniqueFileName(image, directory),
-      readFile(image.path),
-    ])
+    const fileName = await this.getUniqueFileName(image, directory);
+    const file = createReadStream(image.path)
 
     let config: PutObjectCommandInput = {
       ACL: this.acl,
