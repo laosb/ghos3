@@ -63,21 +63,32 @@ class S3Storage extends StorageBase {
     if (!this.bucket) throw new Error('S3 bucket not specified')
 
     // Optional configurations
-    this.host =
-      process.env.GHOST_STORAGE_ADAPTER_S3_ASSET_HOST ||
-      assetHost ||
-      `https://s3${
+    this.forcePathStyle =
+      Boolean(process.env.GHOST_STORAGE_ADAPTER_S3_FORCE_PATH_STYLE) ||
+      Boolean(forcePathStyle) ||
+      false
+    
+    let defaultHost;
+    
+    if(this.forcePathStyle) {
+      defaultHost = `https://s3${
         this.region === 'us-east-1' ? '' : `-${this.region}`
       }.amazonaws.com/${this.bucket}`
+    } else {
+      defaultHost = `https://${this.bucket}.s3${
+        this.region === 'us-east-1' ? '' : `-${this.region}`
+      }.amazonaws.com`
+    }
+
+    this.host =
+      process.env.GHOST_STORAGE_ADAPTER_S3_ASSET_HOST ||
+      assetHost || defaultHost
+    
     this.pathPrefix = stripLeadingSlash(
       process.env.GHOST_STORAGE_ADAPTER_S3_PATH_PREFIX || pathPrefix || ''
     )
     this.endpoint =
       process.env.GHOST_STORAGE_ADAPTER_S3_ENDPOINT || endpoint || ''
-    this.forcePathStyle =
-      Boolean(process.env.GHOST_STORAGE_ADAPTER_S3_FORCE_PATH_STYLE) ||
-      Boolean(forcePathStyle) ||
-      false
     this.acl = (process.env.GHOST_STORAGE_ADAPTER_S3_ACL ||
       acl ||
       'public-read') as ObjectCannedACL
