@@ -67,10 +67,10 @@ class S3Storage extends StorageBase {
       Boolean(process.env.GHOST_STORAGE_ADAPTER_S3_FORCE_PATH_STYLE) ||
       Boolean(forcePathStyle) ||
       false
-    
-    let defaultHost;
-    
-    if(this.forcePathStyle) {
+
+    let defaultHost: string
+
+    if (this.forcePathStyle) {
       defaultHost = `https://s3${
         this.region === 'us-east-1' ? '' : `.${this.region}`
       }.amazonaws.com/${this.bucket}`
@@ -82,8 +82,9 @@ class S3Storage extends StorageBase {
 
     this.host =
       process.env.GHOST_STORAGE_ADAPTER_S3_ASSET_HOST ||
-      assetHost || defaultHost
-    
+      assetHost ||
+      defaultHost
+
     this.pathPrefix = stripLeadingSlash(
       process.env.GHOST_STORAGE_ADAPTER_S3_PATH_PREFIX || pathPrefix || ''
     )
@@ -152,7 +153,7 @@ class S3Storage extends StorageBase {
   async save(image: Image, targetDir?: string) {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
 
-    const fileName = await this.getUniqueFileName(image, directory);
+    const fileName = await this.getUniqueFileName(image, directory)
     const file = createReadStream(image.path)
 
     let config: PutObjectCommandInput = {
