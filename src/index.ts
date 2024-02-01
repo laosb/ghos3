@@ -166,7 +166,7 @@ class S3Storage extends StorageBase {
     }
     await this.s3().putObject(config)
 
-    return `${this.host}/${fileName}`
+    return `${this.host}/${stripLeadingSlash(fileName)}`
   }
 
   serve(): Handler {
