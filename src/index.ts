@@ -196,11 +196,16 @@ class S3Storage extends StorageBase {
         const stream = output.Body as Readable
         stream.pipe(res)
       } catch (err) {
-        res.status(404)
-        next(err)
+        if (err.name === 'NoSuchKey') {
+          res.status(404).send('Image not found');
+        } else {
+          res.status(500);
+          next(err);
+        }
       }
     }
   }
+
 
   async read(options: ReadOptions = { path: '' }) {
     let path = (options.path || '').replace(/\/$|\\$/, '')
