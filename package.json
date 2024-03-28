@@ -1,6 +1,6 @@
 {
   "name": "ghos3",
-  "version": "2.0.0",
+  "version": "3.0.1",
   "description": "S3 Storage adapter for Ghost.",
   "main": "index.js",
   "scripts": {
