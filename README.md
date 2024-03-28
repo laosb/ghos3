@@ -17,22 +17,22 @@ On my blog [_The Base_](https://base.of.sb), I use [Cloudflare R2](https://www.c
 ## Installation
 
 ```bash
-// Install ghos3 package
+# Install ghos3 package
 npm install ghos3
 
-// Create directory to storage adapter
+# Create directory to storage adapter
 mkdir -p ./content/adapters/storage
 
-// Copy package files to s3 storage folder
+# Copy package files to s3 storage folder
 cp -r ./node_modules/ghos3/* ./content/adapters/storage/s3
 
-// Remove unnecessary files generated from ghos3 installation
+# Remove unnecessary files generated from ghos3 installation
 rm -Rf node_modules package-lock.json package.json
 
-// Move to s3 storage folder
+# Move to s3 storage folder
 cd ./content/adapters/storage/s3
 
-// Resolve dependencies
+# Resolve dependencies
 npm install
 ```
 
