@@ -14,6 +14,9 @@ const stripLeadingSlash = (s: string) =>
   s.indexOf('/') === 0 ? s.substring(1) : s
 const stripEndingSlash = (s: string) =>
   s.indexOf('/') === s.length - 1 ? s.substring(0, s.length - 1) : s
+const normalizePath = (filePath) => {
+  return filePath.replace(/\\/g, '/');
+};
 
 type Config = {
   accessKeyId?: string
@@ -86,7 +89,7 @@ class S3Storage extends StorageBase {
       defaultHost
 
     this.pathPrefix = stripLeadingSlash(
-      process.env.GHOST_STORAGE_ADAPTER_S3_PATH_PREFIX || pathPrefix || ''
+      normalizePath(process.env.GHOST_STORAGE_ADAPTER_S3_PATH_PREFIX || pathPrefix || '')
     )
     this.endpoint =
       process.env.GHOST_STORAGE_ADAPTER_S3_ENDPOINT || endpoint || ''
@@ -101,7 +104,7 @@ class S3Storage extends StorageBase {
     try {
       await this.s3().deleteObject({
         Bucket: this.bucket,
-        Key: stripLeadingSlash(join(directory, fileName)),
+        Key: stripLeadingSlash(normalizePath(join(directory, fileName))),
       })
     } catch {
       return false
@@ -114,7 +117,7 @@ class S3Storage extends StorageBase {
       await this.s3().getObject({
         Bucket: this.bucket,
         Key: stripLeadingSlash(
-          targetDir ? join(targetDir, fileName) : fileName
+          normalizePath(targetDir ? join(targetDir, fileName) : fileName)
         ),
       })
     } catch {
@@ -162,7 +165,7 @@ class S3Storage extends StorageBase {
       Bucket: this.bucket,
       CacheControl: `max-age=${30 * 24 * 60 * 60}`,
       ContentType: image.type,
-      Key: stripLeadingSlash(fileName),
+      Key: stripLeadingSlash(normalizePath(fileName)),
     }
     await this.s3().putObject(config)
 
@@ -174,7 +177,7 @@ class S3Storage extends StorageBase {
       try {
         const output = await this.s3().getObject({
           Bucket: this.bucket,
-          Key: stripLeadingSlash(stripEndingSlash(this.pathPrefix) + req.path),
+          Key: stripLeadingSlash(stripEndingSlash(this.pathPrefix) + normalizePath(req.path)),
         })
 
         const headers: { [key: string]: string } = {}
@@ -213,7 +216,7 @@ class S3Storage extends StorageBase {
 
     const response = await this.s3().getObject({
       Bucket: this.bucket,
-      Key: stripLeadingSlash(path),
+      Key: stripLeadingSlash(normalizePath(path)),
     })
     const stream = response.Body as Readable
 
