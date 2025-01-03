@@ -5,6 +5,8 @@ import {
   S3,
 } from '@aws-sdk/client-s3'
 import StorageBase, { type ReadOptions, type Image } from 'ghost-storage-base'
+import errors from '@tryghost/errors'
+import tpl from '@tryghost/tpl'
 import { join } from 'path'
 import { createReadStream } from 'fs'
 import type { Readable } from 'stream'
@@ -197,15 +199,19 @@ class S3Storage extends StorageBase {
         stream.pipe(res)
       } catch (err) {
         if (err.name === 'NoSuchKey') {
-          res.status(404).send('Image not found');
+          return next(
+            new errors.NotFoundError({
+              message: tpl('File not found'),
+              code: 'STATIC_FILE_NOT_FOUND',
+              property: err.path,
+            })
+          )
         } else {
-          res.status(500);
-          next(err);
+          next(new errors.InternalServerError({ err: err }))
         }
       }
     }
   }
-
 
   async read(options: ReadOptions = { path: '' }) {
     let path = (options.path || '').replace(/\/$|\\$/, '')
