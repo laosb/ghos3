@@ -4,8 +4,10 @@
   "description": "S3 Storage adapter for Ghost.",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild ./src/index.js --bundle --outfile=index.js --platform=node --format=cjs --target=node16 --packages=external --footer:js='module.exports = module.exports.default;'",
-    "prepublishOnly": "npm run build",
+    "build:traditional": "esbuild ./src/index.js --bundle --outfile=index.js --platform=node --format=cjs --target=node16 --packages=external --footer:js='module.exports = module.exports.default;'",
+    "build:bundled": "esbuild ./src/index.js --bundle --minify --outfile=index.bundled.js --platform=node --format=cjs --target=node16 --packages=bundle --legal-comments=external --footer:js='module.exports = module.exports.default;'",
+    "build": "pnpm build:traditional && pnpm build:bundled",
+    "prepublishOnly": "pnpm build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shibo Lyu <github@of.sb>",
