@@ -26,6 +26,7 @@ type Config = {
   secretAccessKey?: string
   endpoint?: string
   forcePathStyle?: boolean
+  useDualstackEndpoint?: boolean
   acl?: string
 }
 
@@ -38,6 +39,7 @@ class S3Storage extends StorageBase {
   pathPrefix: string
   endpoint: string
   forcePathStyle: boolean
+  useDualstackEndpoint: boolean
   acl?: ObjectCannedACL
 
   constructor(config: Config = {}) {
@@ -52,6 +54,7 @@ class S3Storage extends StorageBase {
       secretAccessKey,
       endpoint,
       forcePathStyle,
+      useDualstackEndpoint,
       acl,
     } = config
 
@@ -68,6 +71,11 @@ class S3Storage extends StorageBase {
     this.forcePathStyle =
       Boolean(process.env.GHOST_STORAGE_ADAPTER_S3_FORCE_PATH_STYLE) ||
       Boolean(forcePathStyle) ||
+      false
+
+    this.useDualstackEndpoint =
+      Boolean(process.env.GHOST_STORAGE_ADAPTER_S3_USE_DUALSTACK_ENDPOINT) ||
+      Boolean(useDualstackEndpoint) ||
       false
 
     let defaultHost: string
@@ -129,6 +137,7 @@ class S3Storage extends StorageBase {
     const options: S3ClientConfig = {
       region: this.region,
       forcePathStyle: this.forcePathStyle,
+      useDualstackEndpoint: this.useDualstackEndpoint,
     }
 
     // Set credentials only if provided, falls back to AWS SDK's default provider chain
